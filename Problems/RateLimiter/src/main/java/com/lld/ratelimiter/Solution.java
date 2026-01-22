@@ -43,21 +43,52 @@ class TokenBucket {
     }
 }
 
+// --- Metrics Instrumentation (SDE-3 Enhancement) ---
+class RateLimiterMetrics {
+    private final java.util.concurrent.atomic.AtomicLong totalRequests = new java.util.concurrent.atomic.AtomicLong(0);
+    private final java.util.concurrent.atomic.AtomicLong droppedRequests = new java.util.concurrent.atomic.AtomicLong(
+            0);
+
+    public void incrementTotal() {
+        totalRequests.incrementAndGet();
+    }
+
+    public void incrementDropped() {
+        droppedRequests.incrementAndGet();
+    }
+
+    public void printStats() {
+        System.out.println("[Metrics] Total: " + totalRequests.get() + ", Dropped: " + droppedRequests.get());
+    }
+}
+
 // --- Service ---
 class RateLimiterService {
     private final Map<String, TokenBucket> userBuckets;
     private final int capacity;
     private final double refillRate;
+    private final RateLimiterMetrics metrics;
 
     public RateLimiterService(int capacity, double refillRate) {
         this.userBuckets = new ConcurrentHashMap<>();
         this.capacity = capacity;
         this.refillRate = refillRate;
+        this.metrics = new RateLimiterMetrics();
     }
 
     public boolean allowRequest(String userId) {
+        metrics.incrementTotal();
         userBuckets.putIfAbsent(userId, new TokenBucket(capacity, refillRate));
-        return userBuckets.get(userId).tryConsume();
+        boolean allowed = userBuckets.get(userId).tryConsume();
+
+        if (!allowed) {
+            metrics.incrementDropped();
+        }
+        return allowed;
+    }
+
+    public void showMetrics() {
+        metrics.printStats();
     }
 }
 

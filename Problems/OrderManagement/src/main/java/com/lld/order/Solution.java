@@ -79,29 +79,41 @@ class OrderProcessor implements Runnable {
 }
 
 // --- Demo ---
+// --- Demo ---
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+
 public class Solution {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("--- Order Management System (Producer-Consumer) ---");
+        System.out.println("Using Java 21 Virtual Threads");
 
         BlockingQueue<Order> queue = new LinkedBlockingQueue<>(5); // Limit 5
         OrderService service = new OrderService(queue);
 
-        // Start Consumers
-        Thread worker1 = new Thread(new OrderProcessor(queue));
-        Thread worker2 = new Thread(new OrderProcessor(queue));
-        worker1.start();
-        worker2.start();
+        // Feature: Virtual Threads (Project Loom)
+        // High throughput, light-weight threads ideal for I/O bound consumers
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-        // Produce Orders
-        service.placeOrder(new Order(101, "Alice"));
-        service.placeOrder(new Order(102, "Bob"));
-        service.placeOrder(new Order(103, "Charlie"));
+            // Submit consumers as tasks
+            executor.submit(new OrderProcessor(queue));
+            executor.submit(new OrderProcessor(queue));
 
-        // Allow time for processing
-        Thread.sleep(2000);
+            // Produce Orders
+            service.placeOrder(new Order(101, "Alice"));
+            service.placeOrder(new Order(102, "Bob"));
+            service.placeOrder(new Order(103, "Charlie"));
+            service.placeOrder(new Order(104, "Dave"));
+            service.placeOrder(new Order(105, "Eve"));
 
-        System.out.println("Stopping System...");
-        worker1.interrupt();
-        worker2.interrupt();
+            // Allow time for processing
+            Thread.sleep(2000);
+
+            // Executor will auto-close and wait (try-with-resources)
+            // But we need to interrupt infinite loops in consumers
+            // In real app, we use a Poison Pill or volatile flag.
+            System.out.println("Stopping System...");
+            executor.shutdownNow(); // Interrupts running tasks
+        }
     }
 }

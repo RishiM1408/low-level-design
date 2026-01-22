@@ -136,20 +136,52 @@ class Game {
 }
 
 // --- Demo ---
+// --- Interactive Demo ---
+import java.util.Scanner;
+
 public class Solution {
     public static void main(String[] args) {
-        System.out.println("--- Chess Game Demo ---");
+        Scanner scanner = new Scanner(System.in);
         Game game = new Game();
+        System.out.println("--- Chess Game CLI (Interactive) ---");
+        System.out.println("Commands: 'move x1 y1 x2 y2', 'reset', 'exit'");
 
-        // 1. Valid Knight Move (2,1) -> (0,2) (L-Shape)
-        // Black Knight is at (2,1)
-        System.out.println("Test 1: Moving Knight (2,1) -> (0,2)");
-        boolean r1 = game.playerMove(2, 1, 0, 2);
-        System.out.println("Result: " + r1);
+        boolean running = true;
+        while (running) {
+            System.out.print("> ");
+            String line = scanner.nextLine();
+            String[] parts = line.split(" ");
+            String command = parts[0].toLowerCase();
 
-        // 2. Invalid King Move (0,0) -> (0,2) (Too far)
-        System.out.println("\nTest 2: Moving King (0,0) -> (0,2)");
-        boolean r2 = game.playerMove(0, 0, 0, 2);
-        System.out.println("Result: " + r2);
+            // Java 14 Switch Expression
+            String result = switch (command) {
+                case "exit" -> {
+                    running = false;
+                    yield "Exiting...";
+                }
+                case "reset" -> {
+                    game = new Game();
+                    yield "Board Reset.";
+                }
+                case "move" -> {
+                    if (parts.length < 5)
+                        yield "Usage: move x1 y1 x2 y2";
+                    try {
+                        int x1 = Integer.parseInt(parts[1]);
+                        int y1 = Integer.parseInt(parts[2]);
+                        int x2 = Integer.parseInt(parts[3]);
+                        int y2 = Integer.parseInt(parts[4]);
+                        boolean success = game.playerMove(x1, y1, x2, y2);
+                        yield success ? "Valid Move! Board updated." : "Invalid Move.";
+                    } catch (NumberFormatException e) {
+                        yield "Error: Coordinates must be integers.";
+                    }
+                }
+                default -> "Unknown command: " + command;
+            };
+
+            System.out.println(result);
+        }
+        scanner.close();
     }
 }

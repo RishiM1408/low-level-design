@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.lld</groupId>
+    <artifactId>lld-mastery-pro</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>Problems/ATMMachine</module>
+        <module>Problems/Chess</module>
+        <module>Problems/CricInfo</module>
+        <module>Problems/ElevatorSystem</module>
+        <module>Problems/LogFramework</module>
+        <module>Problems/LRUCache</module>
+        <module>Problems/MovieTicketBooking</module>
+        <module>Problems/NotificationSystem</module>
+        <module>Problems/OrderManagement</module>
+        <module>Problems/ParkingLot</module>
+        <module>Problems/RateLimiter</module>
+        <module>Problems/SnakeAndLadders</module>
+        <module>Problems/Splitwise</module>
+        <module>Problems/UnixFind</module>
+        <module>Problems/VendingMachine</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.10.0</junit.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

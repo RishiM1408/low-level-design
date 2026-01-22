@@ -78,3 +78,22 @@ classDiagram
 | :------------------ | :-------------------- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------- |
 | **Algorithm**       | Fixed Window Counter. | Token Bucket. | **Token Bucket**. Handles bursts gracefully and avoids the "double limit at boundary" issue of fixed windows.                          |
 | **Refill Strategy** | Background Thread.    | Lazy Refill.  | **Lazy Refill**. We refill tokens only when a request comes in. This saves CPU resources (no background threads waking up constantly). |
+
+---
+
+## 6. Anti-Patterns (What NOT to do)
+
+### ❌ 1. The 'Sleep' Hack
+*   **Bad:** if (limitExceeded) Thread.sleep(1000);
+*   **Why:** Blocking threads kills scalability. If 10,000 requests come in, you hang 10,000 threads.
+*   **Fix:** Return false (429 Too Many Requests) immediately. Let the client retry.
+
+### ❌ 2. Fixed Window Counters
+*   **Bad:** Resetting counter exactly at 12:00:00, 12:00:01.
+*   **Why:** 'Spike at Edges'. A user can send 10 requests at 12:00:00.999 and 10 more at 12:00:01.001, effectively doubling the rate limit in a short burst.
+*   **Fix:** **Token Bucket** or **Sliding Window Log** smooths out these bursts.
+
+### ❌ 3. Local vs Global (Distributed)
+*   **Bad:** Storing counters in a static HashMap for a 10-server cluster.
+*   **Why:** Rate limits apply per server, not globally. A user gets 10x the limit.
+*   **Fix:** Use a centralized store like **Redis** (Lua Scripts) for distributed counting.

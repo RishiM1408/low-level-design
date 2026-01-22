@@ -102,3 +102,14 @@ classDiagram
 | **S**ingle Responsibility | Match manages state, Displays manage rendering.                    |
 | **O**pen/Closed           | New displays can be added without modifying `CricketMatch`.        |
 | **D**ependency Inversion  | Match depends on `ScoreObserver` interface, not concrete displays. |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Polling for Scores
+*   **Bad:** Client refreshing every second.
+*   **Why:** Server load.
+*   **Fix:** **Observer Pattern** or WebSockets for Push updates.
+
+### ❌ 2. Tightly Coupled Displays
+*   **Bad:** Match object calling mobileDisplay.update().
+*   **Fix:** Decouple via Subject interface. Match doesn't know who is watching.

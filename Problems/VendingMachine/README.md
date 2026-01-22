@@ -86,3 +86,17 @@ classDiagram
 | :-------------- | :------------------------------------- | :----------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
 | **State Logic** | Big `switch-case` in `VendingMachine`. | **State Pattern** (Classes).   | **State Pattern**. It adheres to Open/Closed principle. Adding a new state (e.g. "Maintenance") doesn't break existing code.             |
 | **Concurrency** | `synchronized` methods.                | `AtomicInteger` for inventory. | **Synchronized**. Since it's a physical machine, only one user interacts at a time. Concurrency is less critical than state correctness. |
+
+---
+
+## 6. Anti-Patterns (What NOT to do)
+
+### ❌ 1. The 'Switch' Statement Hell
+*   **Bad:** Using a giant switch(state) inside every method (insertCoin, selectProduct).
+*   **Why:** Adding a new state (e.g., Maintenance) requires modifying *every* method. High risk of bugs.
+*   **Fix:** **State Pattern**. Each state is a class (IdleState, HasMoneyState). Transitions are encapsulated.
+
+### ❌ 2. Returning Change in a Loop
+*   **Bad:** while (balance > 0) dispenseCoin();
+*   **Why:** If the hardware fails halfway, the user loses money or the machine state is corrupt.
+*   **Fix:** Calculate the entire change set *first*, determine if it's possible, *then* dispense. Transactional integrity.

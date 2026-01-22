@@ -60,3 +60,22 @@
 | **Spot Storage** | Loop through `List<Spot>` to find valid. | Maintain `PriorityQueue` of free spots. | **A (or Optimized A)**. Maintaining a synchronizing PQ is complex. We chose a simple `List` with `synchronized` search for simplicity in LLD code, but a PQ is cleaner for "Nearest Spot". _Correction:_ Let's use a **Concurrent List** or `CopyOnWriteArrayList` but strictly lock the assignment block. |
 | **Concurrency**  | `synchronized` entire `park()` method.   | Fine-grained lock per floor.            | **B**. Locking the whole lot creates a bottleneck. Better to lock per floor or use concurrent collections.                                                                                                                                                                                                 |
 | **Pricing**      | Hardcode `calculate()` in Ticket.        | Strategy Interface.                     | **Strategy Interface**. Allows easy updates for "Weekend Pricing" or "Dynamic Pricing" without code changes.                                                                                                                                                                                               |
+
+---
+
+## 6. Anti-Patterns (What NOT to do)
+
+### ❌ 1. God Class 'ParkingLot'
+*   **Bad:** Putting calculatePrice(), parkVehicle(), validateTicket(), and payment() all in the ParkingLot class.
+*   **Why:** Violates Single Responsibility Principle (SRP). Hard to maintain.
+*   **Fix:** Delegate pricing to PricingStrategy, payment to PaymentService.
+
+### ❌ 2. Massive Locking (Concurrency)
+*   **Bad:** synchronized(this) on the park() method.
+*   **Why:** Only one car can enter/exit at a time. Throughput kills performance.
+*   **Fix:** Use fine-grained locking or ConcurrentHashMap for spot management. Only lock the specific *Spot* being assigned, not the whole lot.
+
+### ❌ 3. Hardcoded Pricing
+*   **Bad:** if (type == TRUCK) return 20;
+*   **Why:** Requires code changes to update prices.
+*   **Fix:** Strategy Pattern allows hot-swapping pricing logic (e.g., Surge Pricing).

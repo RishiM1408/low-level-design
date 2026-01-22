@@ -27,10 +27,11 @@ interface ParkingAssignmentStrategy {
 }
 
 // --- Concrete Strategies ---
+// --- Concrete Strategies ---
 class HourlyPricingStrategy implements PricingStrategy {
     @Override
     public double calculateFee(Ticket ticket) {
-        long hours = ChronoUnit.HOURS.between(ticket.entryTime, LocalDateTime.now());
+        long hours = ChronoUnit.HOURS.between(ticket.entryTime(), LocalDateTime.now());
         if (hours == 0)
             hours = 1; // Minimum 1 hour
         return hours * 20.0; // Flat 20 per hour
@@ -161,15 +162,10 @@ class ParkingFloor {
     }
 }
 
-class Ticket {
-    String id;
-    LocalDateTime entryTime;
-    ParkingSpot spot;
-
+// Modern Java: Record for immutable data carrier
+record Ticket(String id, LocalDateTime entryTime, ParkingSpot spot) {
     public Ticket(ParkingSpot spot) {
-        this.id = UUID.randomUUID().toString();
-        this.entryTime = LocalDateTime.now();
-        this.spot = spot;
+        this(UUID.randomUUID().toString(), LocalDateTime.now(), spot);
     }
 }
 
@@ -179,7 +175,8 @@ class ParkingLot {
     private PricingStrategy pricingStrategy;
     private static ParkingLot instance;
 
-    private ParkingLot() {
+    // Package-private for testing
+    ParkingLot() {
         floors = new ArrayList<>();
         assignmentStrategy = new NaturalOrderParkingStrategy();
         pricingStrategy = new HourlyPricingStrategy();
@@ -213,7 +210,7 @@ class ParkingLot {
     }
 
     public double exitVehicle(Ticket ticket) {
-        ticket.spot.removeVehicle();
+        ticket.spot().removeVehicle();
         return pricingStrategy.calculateFee(ticket);
     }
 }
@@ -231,7 +228,7 @@ public class Solution {
         // 1. Park Car
         Ticket t1 = lot.parkVehicle(v1);
         if (t1 != null) {
-            System.out.println("Parked Car. Spot ID: " + t1.spot.getId());
+            System.out.println("Parked Car. Spot ID: " + t1.spot().getId());
         } else {
             System.out.println("Failed to park Car.");
         }
@@ -239,7 +236,7 @@ public class Solution {
         // 2. Park Truck
         Ticket t2 = lot.parkVehicle(v2);
         if (t2 != null) {
-            System.out.println("Parked Truck. Spot ID: " + t2.spot.getId());
+            System.out.println("Parked Truck. Spot ID: " + t2.spot().getId());
         }
 
         // 3. Exit Car

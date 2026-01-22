@@ -98,3 +98,14 @@ classDiagram
 | :---------------------- | :------------------------------------- | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Locking Granularity** | Lock the entire `Show` object.         | Lock individual `Seat` objects. | **A (Show Level) or Hybrid**. Locking individual seats is complex (deadlock risk if booking [1,2] vs [2,1]). Locking the `Show` for the duration of state check + status update is safer and simpler for LLD. |
 | **Lock Expiry**         | Background Thread to check timestamps. | Check validity on read.         | **Background Thread**. We typically need a scheduler to release locks after 5 mins. For this coding solution, we might implement a simplified check.                                                          |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. The 'Double Booking' Bug
+*   **Bad:** Checking isSeatFree and ookSeat as separate DB calls.
+*   **Why:** Race condition. Two users book the same seat.
+*   **Fix:** **Transactions** (ACID) or SELECT ... FOR UPDATE locking.
+
+### ❌ 2. Polling for Payment
+*   **Bad:** Client polling server 'is payment done?'.
+*   **Fix:** Webhooks or Async Messaging (Kafka/SQS).

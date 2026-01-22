@@ -81,3 +81,15 @@ classDiagram
 | :--------------- | :---------------------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **New Channels** | Modify `Service` class. | Use **Factory + Interface**.      | **Factory**. OCP (Open-Closed Principle). We can add `WhatsAppChannel` without touching the Service logic.                                                           |
 | **Execution**    | Synchronous.            | Asynchronous (Producer-Consumer). | **Sync (for LLD)**. For a pure class design, we often show the structure efficiently using Sync. In a System Design interview, we MUST use a Queue (Kafka/RabbitMQ). |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Synchronous Third-Party Calls
+*   **Bad:** Calling SendGrid/Twilio API on the user request thread.
+*   **Why:** If Twilio is down, your API hangs.
+*   **Fix:** **Message Queue** (RabbitMQ). Fire and forget.
+
+### ❌ 2. Hard Dependencies
+*   **Bad:** 
+ew EmailSender() inside the service.
+*   **Fix:** **Dependency Injection** & **Adapter Pattern** to swap providers easily.

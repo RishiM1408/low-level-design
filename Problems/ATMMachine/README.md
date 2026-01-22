@@ -107,3 +107,15 @@ classDiagram
 | **S**ingle Responsibility | States handle transitions, Dispensers handle cash math.                       |
 | **O**pen/Closed           | Add new State (e.g. `DepositState`) or new Note (e.g. `200Dispenser`) easily. |
 | **L**iskov Substitution   | All States follow `ATMState` contract (though throw exceptions).              |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Giant If-Else for States
+*   **Bad:** if (state == HAS_CARD) ... else if (state == IDLE) ...
+*   **Why:** Hard to maintain. Adding a new state touches all methods.
+*   **Fix:** **State Pattern**. IdleState, HasCardState classes.
+
+### ❌ 2. Handling Cash as Integers
+*   **Bad:** int balance = 100;
+*   **Why:** Integer overflow or lack of precision for currencies.
+*   **Fix:** Use BigDecimal or a dedicated Money class.

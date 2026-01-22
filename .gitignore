@@ -1,0 +1,19 @@
+# Binaries and compiled classes
+*.class
+out/
+bin/
+target/
+.gradle/
+build/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# User specific private docs
+suggested_enhancements.md

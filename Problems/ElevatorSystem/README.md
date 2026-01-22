@@ -118,3 +118,15 @@ classDiagram
 | **L**iskov Substitution   | Subtypes of Elevator (ServiceElevator, PassengerElevator) can be swapped.                |
 | **I**nterface Segregation | Panel interfaces separated.                                                              |
 | **D**ependency Inversion  | Building depends on abstractions if strict.                                              |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. FCFS Scheduling
+*   **Bad:** Servicing requests strictly in arrival order.
+*   **Why:** Elevator zig-zags (1 -> 10 -> 2 -> 9). 
+*   **Fix:** **SCAN/LOOK Algorithm**. Continues in one direction before switching.
+
+### ❌ 2. Polling for Requests
+*   **Bad:** while(true) { checkButtons(); sleep(100); }
+*   **Why:** CPU intensive or latent.
+*   **Fix:** Use **Observer Pattern** or Event Listeners.

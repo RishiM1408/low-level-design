@@ -85,3 +85,15 @@ classDiagram
 | :------------------ | :--------------------- | :-------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Move Validation** | Inside `Piece` class.  | Separate `MoveValidator` class.         | **Inside Piece (for standard Chess)**. The logic is intrinsic to the piece. However, "Check" logic belongs in the `Board` or `Game` class because it involves global state. |
 | **Undo Storage**    | Store full board copy. | Store `Move` command (Command Pattern). | **Command Pattern**. Storing difference (delta) is memory efficient and allows infinite undo/redo.                                                                          |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. God Class 'Board'
+*   **Bad:** The Board class validating every move for every piece type.
+*   **Why:** Board becomes 2000 lines long.
+*   **Fix:** **Polymorphism**. Piece.validateMove() handles its own logic.
+
+### ❌ 2. Storing State in strings
+*   **Bad:** String board[][] = new String[8][8]; "K", "Q", "p".
+*   **Why:** String parsing is slow and error-prone.
+*   **Fix:** Use Object-Oriented Cell and Piece objects.

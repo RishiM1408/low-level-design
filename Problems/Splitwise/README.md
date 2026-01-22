@@ -137,3 +137,15 @@ The implementation is provided in the `src/` directory.
 | **L**iskov Substitution   | `EqualSplit`, `ExactSplit` can be used interchangeably wherever `Split` is expected.                                                                             |
 | **I**nterface Segregation | We use focused interfaces for Strategies.                                                                                                                        |
 | **D**ependency Inversion  | High-level `ExpenseService` depends on the abstraction `SplitStrategy`, not concrete implementations like `EqualSplitStrategy` directly (via Factory/Injection). |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Floating Point Money
+*   **Bad:** double amount = 10.0 / 3;
+*   **Why:** Precision errors (.33333). Money vanishes.
+*   **Fix:** Use BigDecimal and rounding modes.
+
+### ❌ 2. Graph Complexity
+*   **Bad:** Solving 'Simplify Debt' with N! brute force.
+*   **Why:** Crashes with >10 users.
+*   **Fix:** Use greedy algorithms or Flow Network (Max Flow/Min Cut) approximations.

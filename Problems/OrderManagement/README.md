@@ -84,3 +84,14 @@ classDiagram
 | :--------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Processing Sync vs Async** | Process payment in API call (Sync). | Use Message Queue (Async).               | **Async**. Payment gateways are slow. Holding the HTTP connection open is bad. Queueing allows "Eventually Consistent" processing and higher throughput. |
 | **Inventory Locking**        | `synchronized` block.               | Database Row Lock / `ConcurrentHashMap`. | **ConcurrentHashMap (for memory simulations)**. `synchronized` on the whole map is too slow. Fine-grained locking or atomic operations are needed.       |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Inventory Oversell
+*   **Bad:** Decrementing inventory after payment success.
+*   **Why:** User pays, but item is gone. Bad UX.
+*   **Fix:** Reserve inventory *temporarily* during checkout (TTL).
+
+### ❌ 2. God 'Order' Object
+*   **Bad:** Order object handling payment, shipping, and notification logic.
+*   **Fix:** **Saga Pattern** or Event Driven Architecture.

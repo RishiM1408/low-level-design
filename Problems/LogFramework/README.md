@@ -125,3 +125,14 @@ The implementation is provided in the `src/` directory.
 | **L**iskov Substitution   | Any subclass of `AbstractLogger` can replace the parent in the chain.                                             |
 | **I**nterface Segregation | Not heavily used here, but `Logger` interface helps.                                                              |
 | **D**ependency Inversion  | `LogManager` depends on `AbstractLogger`, not concrete `ConsoleLogger`.                                           |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Blocking UI for Logs
+*   **Bad:** Writing to disk on the main thread.
+*   **Why:** App freezes while waiting for I/O.
+*   **Fix:** asynchronous logging (Producer-Consumer queue).
+
+### ❌ 2. Hardcoded Log Levels
+*   **Bad:** if (level == 1) checks everywhere.
+*   **Fix:** **Chain of Responsibility**. InfoLogger passes to ErrorLogger.

@@ -91,3 +91,15 @@ classDiagram
 | :------------------ | :--------------------------------------- | :------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Logic structure** | Monolithic `search()` method with flags. | **Specification Pattern**. | **Specification Pattern**. It allows us to build complex queries like `(Size > 5MB OR Name="*.log") AND (Date < Today)`. Option A explodes in complexity. |
 | **Traversal**       | Recursive DFS.                           | BFS with Queue.            | **DFS**. Standard for file systems. Simpler code for an interview. BFS is better if ensuring "shallowest file first" is a requirement.                    |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Recursion without Limit
+*   **Bad:** Naive DFS on a circular symlink (folder inside itself).
+*   **Why:** StackOverflowError.
+*   **Fix:** Track visited inodes or set max depth.
+
+### ❌ 2. Hardcoded Filters
+*   **Bad:** if (file == "txt" && size > 5MB)
+*   **Why:** Can't add dynamic AND/OR logic.
+*   **Fix:** **Specification Pattern** or **Composite Pattern**.

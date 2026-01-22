@@ -86,3 +86,15 @@ classDiagram
 | :----------------- | :------------------------------- | :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Data Structure** | `LinkedHashMap` (Java Built-in). | Custom `HashMap` + `DLL`. | **Custom**. Interviewers want to see you implement the DLL + Map logic manually to prove O(1) understanding.                                                                 |
 | **Locking**        | Lock only the Map.               | Lock Map + List.          | **Lock Both**. The Map and List state must be consistent. If you modify the list (promote to head) but not the map, state is corrupt. We need a lock around the transaction. |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. O(N) Scans
+*   **Bad:** Using ArrayList for the cache and scanning to find the oldest.
+*   **Why:** Operations become O(N). Cache is slow.
+*   **Fix:** HashMap + DoublyLinkedList for O(1).
+
+### ❌ 2. Global Lock
+*   **Bad:** synchronized(map) for both reads and writes.
+*   **Why:** Reads block writes.
+*   **Fix:** ReadWriteLock or ConcurrentHashMap.

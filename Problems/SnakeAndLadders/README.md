@@ -100,3 +100,15 @@ classDiagram
 | **S**ingle Responsibility | `Board` handles jumps, `Game` handles turns.                   |
 | **O**pen/Closed           | Can subclass `Board` to make `ThreeDBoard` or `TeleportBoard`. |
 | **L**iskov Substitution   | `SpecialDice` (e.g. Crooked) can replace `Dice`.               |
+
+---
+## 6. Anti-Patterns (What NOT to do)
+### ❌ 1. Hardcoded Board
+*   **Bad:** if (pos == 99) goto 10
+*   **Why:** Can't change board layout.
+*   **Fix:** Map of Jump Entities (Start -> End).
+
+### ❌ 2. Singleton Game
+*   **Bad:** Formatting the game as a static class.
+*   **Why:** Cannot run multiple games (e.g., tournament).
+*   **Fix:** Game instance per session.

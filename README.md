@@ -39,7 +39,7 @@ To master LLD at a Senior level, every solution in this repo adheres to three co
 | **[Parking Lot System](./Problems/ParkingLot)**           | Amazon, Microsoft    | **Factory, Strategy** (Concurreny: `ReentrantLock`) | ✅ Completed |
 | **[Splitwise](./Problems/Splitwise)**                     | Uber, Razorpay       | **Strategy** (Debt Simplification Graph)            | ✅ Completed |
 | **[Elevator System](./Problems/ElevatorSystem)**          | Uber, Google         | **State, Dispatcher** (SCAN Algorithm)              | ✅ Completed |
-| **[Movie Ticket Booking](./Problems/MovieTicketBooking)** | Flipkart, BookMyShow | **Locking Mechanism** (Concurrency)                 | ⏳ Planned   |
+| **[Movie Ticket Booking](./Problems/MovieTicketBooking)** | Flipkart, BookMyShow | **Locking Mechanism** (Concurrency)                 | ✅ Completed |
 | **[Vending Machine](./Problems/VendingMachine)**          | Google, Walmart      | **State Pattern** (Complex Transitions)             | ✅ Completed |
 | **[ATM Machine](./Problems/ATMMachine)**                  | Amazon, Visa         | **Chain of Responsibility** (Dispensing)            | ✅ Completed |
 | **[Order Management](./Problems/OrderManagement)**        | Wayfair, Flipkart    | **Producer-Consumer** (Queue Processing)            | ✅ Completed |

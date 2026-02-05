@@ -1,3 +1,8 @@
+<div align="center">
+  <h3>Project Views</h3>
+  <img src="https://komarev.com/ghpvc/?username=RishiM1408-low-level-design&label=Project%20Views&color=0e75b6&style=flat" alt="Project Views" />
+</div>
+
 # 🚀 LLD-Mastery-Pro
 
 > **The Ultimate Low-Level Design (LLD) Roadmap for SDE-1, SDE-2, and SDE-3 Interviews.**
